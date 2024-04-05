@@ -1,0 +1,179 @@
+// Prisma schema file
+// See https://www.prisma.io/docs/concepts/components/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Tenant {
+  tenantId    Int       @id @default(autoincrement())
+  dbName      String?
+  dbUsername  String?
+  dbPassword  String?
+  createdDate DateTime?
+  updatedDate DateTime?
+  createdBy   String?
+  updatedBy   String?
+
+  userSettingss UserSettings[] @relation("UserSettingsSettingId")
+}
+
+model Inventory {
+  inventoryId    Int       @id @default(autoincrement())
+  productId      String?
+  warehouseId    String?
+  quantity       String?
+  organisationId String?
+  tenantId       DateTime?
+  createdBy      String?
+  updatedBy      String?
+  createdDate    DateTime?
+  updatedDate    String?
+}
+
+model Language {
+  languageId   Int       @id @default(autoincrement())
+  languageName String?
+  createdBy    String?
+  updatedBy    String?
+  updatedDate  DateTime?
+  createdDate  DateTime?
+}
+
+model UserSettings {
+  settingIdId Int     @id @default(autoincrement())
+  settingId   Tenant? @relation(name: "UserSettingsSettingId", fields: [settingIdId], references: [tenantId])
+  inviteUser  String?
+  managerUser String?
+  languageId  String?
+  role        String?
+  tenantId    String?
+}
+
+model Role {
+  roleId         String    @id @default(uuid())
+  organisationId String    @default(uuid())
+  roleName       String?
+  createdBy      String?
+  updatedBy      String?
+  createdDate    DateTime?
+  updatedDate    DateTime?
+}
+
+model UserBranchMap {
+  branchMAPId    Int       @id @default(autoincrement())
+  organisationId String?
+  branchId       String?
+  role           String?
+  email          String?
+  isActive       Boolean?
+  createdBy      String?
+  createdDate    DateTime?
+  updatedBy      String?
+  updatedDate    DateTime?
+  tenantId       String?
+}
+
+model Branch {
+  branchId       Int       @id @default(autoincrement())
+  organisationId String?
+  address        String?
+  contactNumber  String?
+  branchName     String?
+  isActive       Boolean?
+  createdBy      String?
+  createdDate    DateTime?
+  updatedBy      String?
+  updatedDate    DateTime?
+  tenantId       String?
+}
+
+model Users {
+  userId                    Int       @id @default(autoincrement())
+  firstName                 String?
+  lastName                  String?
+  password                  String?
+  contactNumber             Float?
+  email                     String?
+  resetPasswordToken        String?
+  resetPasswordTokenExpires String?
+  isActive                  Boolean?
+  createdBy                 String?
+  createdDate               DateTime?
+  updatedBy                 String?
+  updatedDate               String?
+}
+
+model CountryAndState {
+  countryId           Int      @id @default(autoincrement())
+  countriesStatesName String?
+  isParent            String?
+  parentId            String?
+  isActive            Boolean?
+}
+
+model Password {
+  passwordId Int @id @default(autoincrement())
+
+  resetPasswordToken String?
+}
+
+model Product {
+  productId Int @id @default(autoincrement())
+
+  tenantId       String?
+  organisationId String?
+  name           String?
+  branchId       String?
+  createdBy      String?
+  updatedBy      String?
+  createdDate    DateTime?
+  updatedDate    DateTime?
+}
+
+model Organisation {
+  organisationId Int @id @default(autoincrement())
+
+  email           String?
+  companyName     String?
+  mobileNumber    String?
+  state           String?
+  country         String?
+  language        String?
+  companySize     String?
+  createdBy       String?
+  createdDate     DateTime?
+  updatedDate     DateTime?
+  updatedBy       String?
+  tenantId        String?
+  primaryInterest String?
+}
+
+model UnitOfMeasure {
+  unitId Int @id @default(autoincrement())
+
+  weight      String?
+  volume      String?
+  createdBy   String?
+  createdDate DateTime?
+  updatedBy   String?
+  updatedDate String?
+}
+
+model Warehouse {
+  warehouseId Int @id @default(autoincrement())
+
+  organisationId String?
+  tenantId       String?
+  name           String?
+  location       String?
+  createdBy      String?
+  createdDate    String?
+  updatedBy      String?
+  updatedDate    String?
+}
